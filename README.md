@@ -72,22 +72,46 @@ Built with scalability, security, maintainability, and clean architecture princi
 
 The application follows a clean and maintainable layered architecture:
 
-```text
 Presentation Layer
+│
+├── Jinja2 Templates
+├── Bootstrap 5 UI
+└── Static Assets (CSS/JS)
         │
         ▼
-   Flask Routes
+Application Layer
+│
+├── Flask Blueprints
+│   ├── Auth Module
+│   ├── Course Module
+│   ├── Dashboard Module
+│   └── Admin Module
+│
+├── WTForms Validation
+└── Utility Components
         │
         ▼
- Service Layer
-(Business Logic)
+Business Layer
+│
+├── User Service
+├── Course Service
+└── Storage Service
         │
         ▼
- SQLAlchemy ORM
+Data Access Layer
+│
+└── SQLAlchemy ORM Models
+    ├── User
+    ├── Course
+    ├── Enrollment
+    └── Material
         │
         ▼
-   Database Layer
-```
+Persistence Layer
+│
+├── SQLite (Development)
+├── PostgreSQL (Production)
+└── MySQL (Supported)
 
 ### Architecture Highlights
 
@@ -143,24 +167,45 @@ Presentation Layer
 
 ## 📂 Project Structure
 
-```text
 learnhub/
-│
 ├── app/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-│   ├── forms/
-│   ├── templates/
-│   └── static/
-│
+│   ├── __init__.py          # Application factory
+│   ├── config.py            # Environment-based config
+│   ├── models/              # SQLAlchemy ORM models
+│   │   ├── user.py
+│   │   ├── course.py
+│   │   ├── enrollment.py
+│   │   └── material.py
+│   ├── routes/              # Flask blueprints
+│   │   ├── main.py          # Home, About
+│   │   ├── auth.py          # Register, Login, Logout
+│   │   ├── courses.py       # Course CRUD, enrollment, materials
+│   │   ├── dashboard.py     # Student & instructor dashboards
+│   │   └── admin.py         # Admin panel
+│   ├── services/            # Business logic layer
+│   │   ├── course_service.py
+│   │   ├── user_service.py
+│   │   └── storage.py       # Local / S3 abstraction
+│   ├── forms/               # WTForms with server-side validation
+│   │   ├── auth.py
+│   │   └── course.py
+│   ├── utils/
+│   │   ├── decorators.py    # @instructor_required, @admin_required
+│   │   └── template_helpers.py
+│   ├── templates/           # Jinja2 templates
+│   └── static/              # CSS, JS
 ├── scripts/
+│   └── seed.py              # Demo data seeder
 ├── tests/
-├── run.py
-├── manage.py
+│   ├── conftest.py
+│   ├── test_auth.py
+│   ├── test_courses.py
+│   └── test_user_service.py
+├── run.py                   # Dev server entry point
+├── manage.py                # Flask CLI helpers
 ├── requirements.txt
-└── .env.example
-```
+├── .env.example
+└── pytest.ini
 
 ---
 
