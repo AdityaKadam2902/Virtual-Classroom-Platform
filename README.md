@@ -169,7 +169,7 @@ Persistence Layer
 ---
 
 ## 📂 Project Structure
-
+```
 learnhub/
 ├── app/
 │   ├── __init__.py          # Application factory
@@ -211,7 +211,7 @@ learnhub/
 └── pytest.ini
 
 ---
-
+```
 ## ⚡ Quick Start
 
 ### Clone Repository
