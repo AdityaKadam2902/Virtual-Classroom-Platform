@@ -72,6 +72,7 @@ Built with scalability, security, maintainability, and clean architecture princi
 
 The application follows a clean and maintainable layered architecture:
 
+```
 Presentation Layer
 │
 ├── Jinja2 Templates
@@ -112,6 +113,8 @@ Persistence Layer
 ├── SQLite (Development)
 ├── PostgreSQL (Production)
 └── MySQL (Supported)
+
+```
 
 ### Architecture Highlights
 
