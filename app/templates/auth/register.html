@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="card-header bg-primary text-white text-center py-4 border-0">
+          <i class="bi bi-person-plus-fill display-5 mb-2 d-block"></i>
+          <h4 class="mb-0 fw-bold">Join LearnHub</h4>
+          <p class="mb-0 small text-white-75">Create your free account in seconds</p>
+        </div>
+        <div class="card-body p-4 p-md-5">
+          <form method="POST" novalidate>
+            {{ form.hidden_tag() }}
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                {{ form.first_name.label(class="form-label fw-semibold") }}
+                {{ form.first_name(class="form-control rounded-3" +
+                   (" is-invalid" if form.first_name.errors else ""),
+                   placeholder="Jane") }}
+                {% for error in form.first_name.errors %}
+                  <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+              </div>
+              <div class="col-md-6">
+                {{ form.last_name.label(class="form-label fw-semibold") }}
+                {{ form.last_name(class="form-control rounded-3" +
+                   (" is-invalid" if form.last_name.errors else ""),
+                   placeholder="Doe") }}
+                {% for error in form.last_name.errors %}
+                  <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              {{ form.email.label(class="form-label fw-semibold") }}
+              {{ form.email(class="form-control rounded-3" +
+                 (" is-invalid" if form.email.errors else ""),
+                 placeholder="you@example.com", autocomplete="email") }}
+              {% for error in form.email.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <!-- Role chooser styled as toggle buttons -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">I am joining as</label>
+              <div class="d-flex gap-3">
+                {% for value, label in form.role.choices %}
+                <div class="flex-fill">
+                  <input type="radio" class="btn-check" name="{{ form.role.name }}"
+                         id="role_{{ value }}" value="{{ value }}"
+                         {% if form.role.data == value %}checked{% endif %} />
+                  <label class="btn btn-outline-primary w-100 rounded-3" for="role_{{ value }}">
+                    {% if value == 'student' %}
+                      <i class="bi bi-person-check d-block display-6 mb-1"></i>
+                    {% else %}
+                      <i class="bi bi-person-workspace d-block display-6 mb-1"></i>
+                    {% endif %}
+                    {{ label }}
+                  </label>
+                </div>
+                {% endfor %}
+              </div>
+              {% for error in form.role.errors %}
+                <div class="text-danger small mt-1">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="mb-3">
+              {{ form.password.label(class="form-label fw-semibold") }}
+              <div class="input-group">
+                {{ form.password(class="form-control rounded-start-3" +
+                   (" is-invalid" if form.password.errors else ""),
+                   placeholder="Min. 8 chars, 1 uppercase, 1 digit",
+                   id="passwordField", autocomplete="new-password") }}
+                <button class="btn btn-outline-secondary" type="button"
+                        onclick="togglePassword('passwordField', this)">
+                  <i class="bi bi-eye"></i>
+                </button>
+                {% for error in form.password.errors %}
+                  <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              {{ form.confirm_password.label(class="form-label fw-semibold") }}
+              {{ form.confirm_password(class="form-control rounded-3" +
+                 (" is-invalid" if form.confirm_password.errors else ""),
+                 placeholder="Repeat password", autocomplete="new-password") }}
+              {% for error in form.confirm_password.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="mb-4">
+              <div class="form-check">
+                {{ form.terms(class="form-check-input" + (" is-invalid" if form.terms.errors else "")) }}
+                <label class="form-check-label small text-muted" for="{{ form.terms.id }}">
+                  I agree to the
+                  <a href="#" class="text-primary text-decoration-none">Terms of Service</a>
+                  and
+                  <a href="#" class="text-primary text-decoration-none">Privacy Policy</a>
+                </label>
+                {% for error in form.terms.errors %}
+                  <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+              </div>
+            </div>
+
+            {{ form.submit(class="btn btn-primary w-100 btn-lg rounded-3 fw-semibold") }}
+          </form>
+
+          <hr class="my-4" />
+          <p class="text-center text-muted mb-0 small">
+            Already have an account?
+            <a href="{{ url_for('auth.login') }}" class="text-primary fw-semibold text-decoration-none">
+              Sign in
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function togglePassword(fieldId, btn) {
+  const field = document.getElementById(fieldId);
+  const icon = btn.querySelector('i');
+  field.type = field.type === 'password' ? 'text' : 'password';
+  icon.className = field.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+}
+</script>
+{% endblock %}

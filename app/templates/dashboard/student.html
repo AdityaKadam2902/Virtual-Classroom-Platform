@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+<div class="bg-light border-bottom py-4 mb-4">
+  <div class="container">
+    <div class="d-flex align-items-center gap-3">
+      <div class="avatar-lg rounded-circle bg-primary text-white d-flex align-items-center
+                  justify-content-center fw-bold fs-4">
+        {{ current_user.first_name[0] }}{{ current_user.last_name[0] }}
+      </div>
+      <div>
+        <h1 class="h4 fw-bold mb-0">Welcome back, {{ current_user.first_name }}!</h1>
+        <p class="text-muted mb-0 small">Student Dashboard</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container pb-5">
+  <!-- Stats row -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="h3 fw-bold text-primary mb-0">{{ enrollments | length }}</div>
+        <small class="text-muted">Enrolled Courses</small>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="h3 fw-bold text-success mb-0">
+          {{ enrollments | selectattr('completed') | list | length }}
+        </div>
+        <small class="text-muted">Completed</small>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100">
+        <div class="h3 fw-bold text-warning mb-0">
+          {{ enrollments | rejectattr('completed') | list | length }}
+        </div>
+        <small class="text-muted">In Progress</small>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm text-center p-3 h-100 d-flex flex-column align-items-center justify-content-center">
+        <a href="{{ url_for('courses.index') }}"
+           class="btn btn-outline-primary btn-sm rounded-pill px-3">
+          <i class="bi bi-search me-1"></i>Find Courses
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enrollments -->
+  <h5 class="fw-bold mb-3">My Courses</h5>
+  {% if enrollments %}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for enrollment in enrollments %}
+    <div class="col">
+      <div class="card border-0 shadow-sm h-100">
+        {% if enrollment.course.thumbnail_url %}
+        <img src="{{ enrollment.course.thumbnail_url }}"
+             class="card-img-top" alt="Course thumbnail"
+             style="height:160px;object-fit:cover" />
+        {% else %}
+        <div class="d-flex align-items-center justify-content-center bg-primary bg-opacity-10"
+             style="height:160px;">
+          <i class="bi bi-play-circle display-4 text-primary opacity-50"></i>
+        </div>
+        {% endif %}
+        <div class="card-body d-flex flex-column">
+          <span class="badge bg-light text-secondary small mb-1">
+            {{ enrollment.course.level }}
+          </span>
+          <h6 class="card-title fw-bold">{{ enrollment.course.title }}</h6>
+          <div class="mt-auto">
+            <div class="d-flex justify-content-between small text-muted mb-1">
+              <span>Progress</span>
+              <span>{{ enrollment.progress }}%</span>
+            </div>
+            <div class="progress rounded-pill mb-3" style="height:6px">
+              <div class="progress-bar bg-primary" style="width:{{ enrollment.progress }}%"></div>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="{{ url_for('courses.detail', slug=enrollment.course.slug) }}"
+                 class="btn btn-primary btn-sm rounded-pill flex-fill">
+                {% if enrollment.completed %}Review{% else %}Continue{% endif %}
+              </a>
+              {% if enrollment.completed %}
+              <span class="badge bg-success d-flex align-items-center px-2">
+                <i class="bi bi-check2"></i>
+              </span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-5">
+    <i class="bi bi-journal-bookmark display-3 text-muted opacity-25 d-block mb-3"></i>
+    <h5 class="text-muted fw-normal">You haven't enrolled in any courses yet.</h5>
+    <a href="{{ url_for('courses.index') }}" class="btn btn-primary rounded-pill mt-3 px-4">
+      <i class="bi bi-search me-1"></i>Browse Courses
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

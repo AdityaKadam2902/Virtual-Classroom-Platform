@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+<!-- Page header -->
+<div class="bg-light border-bottom py-4 mb-4">
+  <div class="container">
+    <h1 class="h3 fw-bold mb-1">Browse Courses</h1>
+    <p class="text-muted mb-0">Discover what you want to learn today</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+  <!-- Search & Filter row -->
+  <form method="GET" action="{{ url_for('courses.index') }}" class="row g-2 mb-4">
+    <div class="col-md-5">
+      {{ form.q(class="form-control rounded-pill", placeholder="Search courses…") }}
+    </div>
+    <div class="col-md-3">
+      {{ form.level(class="form-select rounded-pill") }}
+    </div>
+    <div class="col-md-3">
+      {{ form.category(class="form-select rounded-pill") }}
+    </div>
+    <div class="col-md-1 d-grid">
+      {{ form.submit(class="btn btn-primary rounded-pill") }}
+    </div>
+  </form>
+
+  <!-- Results count -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <p class="text-muted mb-0 small">
+      {{ courses.total }} course{{ 's' if courses.total != 1 }} found
+    </p>
+    {% if current_user.is_authenticated and current_user.is_instructor %}
+    <a href="{{ url_for('courses.create') }}" class="btn btn-success btn-sm rounded-pill">
+      <i class="bi bi-plus-circle me-1"></i>New Course
+    </a>
+    {% endif %}
+  </div>
+
+  <!-- Course grid -->
+  {% if courses.items %}
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+    {% for course in courses.items %}
+    {% include "courses/_course_card.html" %}
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% if courses.pages > 1 %}
+  <nav class="mt-5 d-flex justify-content-center">
+    <ul class="pagination">
+      {% if courses.has_prev %}
+      <li class="page-item">
+        <a class="page-link rounded-start-pill"
+           href="{{ url_for('courses.index', page=courses.prev_num,
+                            q=request.args.get('q',''),
+                            level=request.args.get('level',''),
+                            category=request.args.get('category','')) }}">
+          <i class="bi bi-chevron-left"></i>
+        </a>
+      </li>
+      {% endif %}
+      {% for p in courses.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
+        {% if p %}
+        <li class="page-item {% if p == courses.page %}active{% endif %}">
+          <a class="page-link"
+             href="{{ url_for('courses.index', page=p,
+                              q=request.args.get('q',''),
+                              level=request.args.get('level',''),
+                              category=request.args.get('category','')) }}">{{ p }}</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">…</span></li>
+        {% endif %}
+      {% endfor %}
+      {% if courses.has_next %}
+      <li class="page-item">
+        <a class="page-link rounded-end-pill"
+           href="{{ url_for('courses.index', page=courses.next_num,
+                            q=request.args.get('q',''),
+                            level=request.args.get('level',''),
+                            category=request.args.get('category','')) }}">
+          <i class="bi bi-chevron-right"></i>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+
+  {% else %}
+  <div class="text-center py-5">
+    <i class="bi bi-search display-3 text-muted opacity-50 mb-3 d-block"></i>
+    <h5 class="text-muted fw-normal">No courses found</h5>
+    <p class="text-muted small">Try adjusting your search or filters.</p>
+    <a href="{{ url_for('courses.index') }}" class="btn btn-outline-primary rounded-pill mt-2">
+      Clear Filters
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

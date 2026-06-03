@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="d-flex align-items-center gap-3 mb-4">
+        <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline-secondary btn-sm rounded-circle">
+          <i class="bi bi-arrow-left"></i>
+        </a>
+        <h2 class="h4 fw-bold mb-0">{{ title }}</h2>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4 p-md-5">
+          <form method="POST" novalidate>
+            {{ form.hidden_tag() }}
+
+            <h6 class="text-muted text-uppercase small fw-semibold mb-3 border-bottom pb-2">Basic Info</h6>
+
+            <div class="mb-3">
+              {{ form.title.label(class="form-label fw-semibold") }}
+              {{ form.title(class="form-control rounded-3" +
+                 (" is-invalid" if form.title.errors else ""),
+                 placeholder="e.g. Complete Python Bootcamp") }}
+              {% for e in form.title.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+
+            <div class="mb-3">
+              {{ form.short_description.label(class="form-label fw-semibold") }}
+              {{ form.short_description(class="form-control rounded-3" +
+                 (" is-invalid" if form.short_description.errors else ""),
+                 placeholder="One sentence shown on course cards (max 300 chars)") }}
+              {% for e in form.short_description.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+
+            <div class="mb-4">
+              {{ form.description.label(class="form-label fw-semibold") }}
+              {{ form.description(class="form-control rounded-3" +
+                 (" is-invalid" if form.description.errors else ""),
+                 rows=6, placeholder="Full course description — what will students learn?") }}
+              {% for e in form.description.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+
+            <h6 class="text-muted text-uppercase small fw-semibold mb-3 border-bottom pb-2 mt-4">Details</h6>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-4">
+                {{ form.level.label(class="form-label fw-semibold") }}
+                {{ form.level(class="form-select rounded-3") }}
+              </div>
+              <div class="col-md-4">
+                {{ form.duration_hours.label(class="form-label fw-semibold") }}
+                {{ form.duration_hours(class="form-control rounded-3", placeholder="0") }}
+              </div>
+              <div class="col-md-4">
+                {{ form.price.label(class="form-label fw-semibold") }}
+                <div class="input-group">
+                  <span class="input-group-text rounded-start-3">$</span>
+                  {{ form.price(class="form-control rounded-end-3", placeholder="0.00") }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                {{ form.category_id.label(class="form-label fw-semibold") }}
+                {{ form.category_id(class="form-select rounded-3") }}
+              </div>
+              <div class="col-md-6">
+                {{ form.thumbnail_url.label(class="form-label fw-semibold") }}
+                {{ form.thumbnail_url(class="form-control rounded-3",
+                   placeholder="https://...") }}
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <div class="form-check form-switch">
+                {{ form.is_published(class="form-check-input", role="switch") }}
+                {{ form.is_published.label(class="form-check-label fw-semibold") }}
+              </div>
+              <small class="text-muted">Unpublished courses are invisible to students.</small>
+            </div>
+
+            <div class="d-flex gap-2">
+              {{ form.submit(class="btn btn-primary rounded-3 px-4 fw-semibold") }}
+              <a href="{{ url_for('dashboard.index') }}" class="btn btn-outline-secondary rounded-3 px-4">
+                Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

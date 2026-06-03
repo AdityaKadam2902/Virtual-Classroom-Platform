@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="card-header bg-primary text-white text-center py-4 border-0">
+          <i class="bi bi-mortarboard-fill display-5 mb-2 d-block"></i>
+          <h4 class="mb-0 fw-bold">Welcome Back</h4>
+          <p class="mb-0 small text-white-75">Sign in to your LearnHub account</p>
+        </div>
+        <div class="card-body p-4 p-md-5">
+          <form method="POST" novalidate>
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+              {{ form.email.label(class="form-label fw-semibold") }}
+              {{ form.email(class="form-control form-control-lg rounded-3" +
+                 (" is-invalid" if form.email.errors else ""),
+                 placeholder="you@example.com", autocomplete="email") }}
+              {% for error in form.email.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="mb-3">
+              {{ form.password.label(class="form-label fw-semibold") }}
+              <div class="input-group">
+                {{ form.password(class="form-control form-control-lg rounded-start-3" +
+                   (" is-invalid" if form.password.errors else ""),
+                   placeholder="••••••••", autocomplete="current-password",
+                   id="passwordField") }}
+                <button class="btn btn-outline-secondary" type="button"
+                        onclick="togglePassword('passwordField', this)">
+                  <i class="bi bi-eye"></i>
+                </button>
+                {% for error in form.password.errors %}
+                  <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+              <div class="form-check">
+                {{ form.remember(class="form-check-input") }}
+                {{ form.remember.label(class="form-check-label small text-muted") }}
+              </div>
+            </div>
+
+            {{ form.submit(class="btn btn-primary w-100 btn-lg rounded-3 fw-semibold") }}
+          </form>
+
+          <hr class="my-4" />
+          <p class="text-center text-muted mb-0 small">
+            Don't have an account?
+            <a href="{{ url_for('auth.register') }}" class="text-primary fw-semibold text-decoration-none">
+              Create one for free
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function togglePassword(fieldId, btn) {
+  const field = document.getElementById(fieldId);
+  const icon = btn.querySelector('i');
+  if (field.type === 'password') {
+    field.type = 'text';
+    icon.className = 'bi bi-eye-slash';
+  } else {
+    field.type = 'password';
+    icon.className = 'bi bi-eye';
+  }
+}
+</script>
+{% endblock %}

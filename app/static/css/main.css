@@ -1,0 +1,272 @@
+/* ============================================================
+   LearnHub — Main Stylesheet
+   Design tokens, layout overrides, and custom components.
+   Bootstrap 5.3 is the base; we only add/override what's needed.
+   ============================================================ */
+
+/* ── Design tokens ─────────────────────────────────────────── */
+:root {
+  --lh-primary:        #2563eb;   /* blue-600 */
+  --lh-primary-dark:   #1d4ed8;   /* blue-700 */
+  --lh-success:        #16a34a;
+  --lh-warning:        #d97706;
+  --lh-surface:        #f8fafc;
+  --lh-border:         #e2e8f0;
+  --lh-text:           #1e293b;
+  --lh-text-muted:     #64748b;
+  --lh-radius:         0.75rem;
+  --lh-radius-lg:      1rem;
+  --lh-shadow:         0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --lh-shadow-md:      0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06);
+  --lh-shadow-lg:      0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+  --lh-transition:     all .2s ease;
+}
+
+/* ── Base ──────────────────────────────────────────────────── */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--lh-text);
+  background-color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Typography helpers ────────────────────────────────────── */
+.text-white-75  { color: rgba(255,255,255,.75) !important; }
+.text-white-50  { color: rgba(255,255,255,.50) !important; }
+
+/* ── Navbar ────────────────────────────────────────────────── */
+.navbar {
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+  letter-spacing: -.01em;
+}
+
+.navbar .nav-link {
+  font-weight: 500;
+  font-size: .9rem;
+  padding: .5rem .75rem;
+  border-radius: .5rem;
+  transition: background .15s;
+}
+
+.navbar-dark .nav-link:hover {
+  background: rgba(255,255,255,.1);
+}
+
+/* Initials avatar in nav */
+.avatar-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  font-size: .75rem;
+}
+
+.avatar-lg {
+  width: 52px;
+  height: 52px;
+  font-size: 1.1rem;
+}
+
+/* ── Hero section (home) ───────────────────────────────────── */
+.hero-section {
+  background: linear-gradient(135deg, var(--lh-primary) 0%, #1e40af 60%, #312e81 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.hero-illustration {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Course detail hero ────────────────────────────────────── */
+.course-detail-hero {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+/* ── Feature cards ─────────────────────────────────────────── */
+.feature-card {
+  transition: var(--lh-transition);
+  border-radius: var(--lh-radius-lg) !important;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--lh-shadow-lg) !important;
+}
+
+.feature-icon {
+  line-height: 1;
+}
+
+/* ── Category cards ────────────────────────────────────────── */
+.category-card {
+  transition: var(--lh-transition);
+  border-radius: var(--lh-radius) !important;
+}
+
+.category-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--lh-shadow-md) !important;
+  border-color: var(--lh-primary) !important;
+}
+
+/* ── Course cards ──────────────────────────────────────────── */
+.course-card {
+  border-radius: var(--lh-radius-lg) !important;
+  transition: var(--lh-transition);
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--lh-shadow-lg) !important;
+}
+
+.course-thumb,
+.course-thumb-placeholder {
+  height: 185px;
+  object-fit: cover;
+}
+
+/* ── Auth cards ────────────────────────────────────────────── */
+.card-header.bg-primary {
+  background: linear-gradient(135deg, var(--lh-primary), #1e40af) !important;
+}
+
+/* ── Forms ─────────────────────────────────────────────────── */
+.form-control,
+.form-select {
+  border-color: var(--lh-border);
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--lh-primary);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+}
+
+/* ── Buttons ───────────────────────────────────────────────── */
+.btn {
+  font-weight: 500;
+  transition: var(--lh-transition);
+}
+
+.btn-primary {
+  background: var(--lh-primary);
+  border-color: var(--lh-primary);
+}
+
+.btn-primary:hover {
+  background: var(--lh-primary-dark);
+  border-color: var(--lh-primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn-warning {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* ── Progress bar ──────────────────────────────────────────── */
+.progress {
+  background-color: #e2e8f0;
+}
+
+/* ── Table ─────────────────────────────────────────────────── */
+.table > thead > tr > th {
+  font-size: .8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--lh-text-muted);
+  border-bottom-width: 1px;
+}
+
+/* ── Pagination ────────────────────────────────────────────── */
+.page-link {
+  border-color: var(--lh-border);
+  color: var(--lh-primary);
+}
+
+.page-item.active .page-link {
+  background-color: var(--lh-primary);
+  border-color: var(--lh-primary);
+}
+
+/* ── Alerts ────────────────────────────────────────────────── */
+.alert {
+  border: none;
+  border-radius: var(--lh-radius);
+}
+
+/* ── Footer links ──────────────────────────────────────────── */
+.link-hover:hover {
+  color: #fff !important;
+}
+
+/* ── Dropdown ──────────────────────────────────────────────── */
+.dropdown-menu {
+  border-radius: var(--lh-radius);
+  min-width: 200px;
+}
+
+.dropdown-item {
+  font-size: .9rem;
+  padding: .5rem 1rem;
+  border-radius: .4rem;
+  margin: .1rem .35rem;
+  width: auto;
+  transition: background .12s;
+}
+
+/* ── Badge overrides ───────────────────────────────────────── */
+.badge {
+  font-weight: 500;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero-section {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  .hero-section h1 {
+    font-size: 2.2rem;
+  }
+
+  .course-thumb,
+  .course-thumb-placeholder {
+    height: 160px;
+  }
+}
+
+/* ── Utility ───────────────────────────────────────────────── */
+.min-width-0 { min-width: 0; }  /* fixes flex truncation */
+
+.rounded-4 { border-radius: var(--lh-radius-lg) !important; }
+
+/* Scrollbar (WebKit) */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }

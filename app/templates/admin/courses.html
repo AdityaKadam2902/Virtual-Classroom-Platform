@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Admin — Courses{% endblock %}
+
+{% block content %}
+<div class="bg-dark text-white py-4 mb-4">
+  <div class="container">
+    <h1 class="h4 fw-bold mb-0"><i class="bi bi-shield-check me-2"></i>Admin Panel</h1>
+    <p class="text-white-50 mb-0 small">Platform management</p>
+  </div>
+</div>
+
+<div class="container pb-5">
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.index') }}">Overview</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.users') }}">Users</a></li>
+    <li class="nav-item"><a class="nav-link active" href="{{ url_for('admin.courses') }}">Courses</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.categories') }}">Categories</a></li>
+  </ul>
+
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th class="ps-4">Title</th>
+            <th>Instructor</th>
+            <th>Level</th>
+            <th>Students</th>
+            <th>Status</th>
+            <th class="pe-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for course in courses.items %}
+          <tr>
+            <td class="ps-4">
+              <div class="fw-semibold">{{ course.title | truncate(45) }}</div>
+              <small class="text-muted">{{ course.created_at | timeago }}</small>
+            </td>
+            <td class="text-muted small">{{ course.instructor.full_name }}</td>
+            <td><span class="badge bg-light text-secondary">{{ course.level }}</span></td>
+            <td>{{ course.student_count }}</td>
+            <td>
+              {% if course.is_published %}
+                <span class="badge bg-success rounded-pill">Published</span>
+              {% else %}
+                <span class="badge bg-secondary rounded-pill">Draft</span>
+              {% endif %}
+            </td>
+            <td class="pe-4">
+              <div class="d-flex gap-1">
+                <a href="{{ url_for('courses.detail', slug=course.slug) }}"
+                   class="btn btn-sm btn-outline-primary rounded-pill" title="View">
+                  <i class="bi bi-eye"></i>
+                </a>
+                <form method="POST"
+                      action="{{ url_for('admin.toggle_publish', course_id=course.id) }}">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                  <button type="submit"
+                          class="btn btn-sm rounded-pill {{ 'btn-outline-warning' if course.is_published else 'btn-outline-success' }}"
+                          title="{{ 'Unpublish' if course.is_published else 'Publish' }}">
+                    <i class="bi bi-{{ 'eye-slash' if course.is_published else 'check-circle' }}"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if courses.pages > 1 %}
+  <nav class="mt-4 d-flex justify-content-center">
+    <ul class="pagination">
+      {% if courses.has_prev %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('admin.courses', page=courses.prev_num) }}">
+          <i class="bi bi-chevron-left"></i>
+        </a>
+      </li>
+      {% endif %}
+      {% for p in courses.iter_pages() %}
+        {% if p %}
+        <li class="page-item {% if p == courses.page %}active{% endif %}">
+          <a class="page-link" href="{{ url_for('admin.courses', page=p) }}">{{ p }}</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">…</span></li>
+        {% endif %}
+      {% endfor %}
+      {% if courses.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('admin.courses', page=courses.next_num) }}">
+          <i class="bi bi-chevron-right"></i>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}
