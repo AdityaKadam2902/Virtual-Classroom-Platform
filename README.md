@@ -1,6 +1,3 @@
-Here is a **professional, recruiter-friendly, industry-standard GitHub README** that creates a strong first impression for HRs, recruiters, engineering managers, CTOs, professors, and potential employers.
-
----
 
 # 🎓 LearnHub — Virtual Classroom & Learning Platform
 
